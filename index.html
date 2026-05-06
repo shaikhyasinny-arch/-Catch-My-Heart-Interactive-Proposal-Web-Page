@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0">
+    <title>🌹</title>
+    <style>
+        /* ── Reset & Base ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(145deg, #1e0017 0%, #3d0a2c 45%, #1e0017 100%);
+            font-family: 'Georgia', 'Times New Roman', serif;
+            overflow: hidden;
+            padding: 15px;
+            touch-action: manipulation;
+            /* prevents double-tap zoom on buttons */
+            -webkit-user-select: none;
+            user-select: none;
+            position: relative;
+        }
+
+        /* ── Twinkling stars background ── */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--d) ease-in-out infinite;
+            animation-delay: var(--del);
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0%,
+            100% { opacity: 0.2; transform: scale(1); }
+            40% { opacity: 0.9; transform: scale(1.6); }
+            70% { opacity: 0.3; transform: scale(0.8); }
+        }
+
+        /* ── Floating hearts & petals ── */
+        .floaters {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floater {
+            position: absolute;
+            bottom: -40px;
+            font-size: var(--s);
+            opacity: 0.55;
+            filter: drop-shadow(0 0 4px rgba(255, 100, 150, 0.5));
+            animation: rise var(--d) linear infinite;
+            animation-delay: var(--del);
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg) scale(0.4);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.65;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-105vh) translateX(var(--dx)) rotate(var(--rot)) scale(1.1);
+                opacity: 0;
+            }
+        }
+
+        /* ── Main card ── */
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 235, 245, 0.12);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 45px;
+            padding: 35px 20px 50px;
+            text-align: center;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(255, 180, 200, 0.4);
+            border: 1px solid rgba(255, 215, 215, 0.5);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            min-height: 480px;
+            transition: all 0.2s ease;
+        }
+
+        /* ── Decorative rose ── */
+        .rose-emoji {
+            font-size: 70px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px #ff3366;
+            animation: pulse 2.2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%,
+            100% { transform: scale(1); }
+            50% { transform: scale(1.08); text-shadow: 0 0 35px #ff5080; }
+        }
+
+        h2 {
+            font-size: clamp(1.6rem, 7vw, 2.2rem);
+            color: #ffe6f0;
+            margin-bottom: 30px;
+            font-weight: normal;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 15px #ff4d6d;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .heart-accent {
+            color: #ff4d6d;
+            margin: 0 4px;
+        }
+
+        /* ── Buttons area ── */
+        .button-zone {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            /* Space for No button to roam */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 10px;
+        }
+
+        /* ── Yes button (fixed) ── */
+        #yesBtn {
+            background: linear-gradient(135deg, #ff4d6d, #c9184a);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 1.6rem;
+            font-weight: bold;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(201, 24, 74, 0.7), 0 0 30px #ff4d6d88;
+            letter-spacing: 1px;
+            transition: all 0.25s;
+            z-index: 10;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 20px;
+            /* fixed position inside the zone */
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            animation: yesGlow 2s infinite alternate;
+        }
+
+        @keyframes yesGlow {
+            from { box-shadow: 0 10px 25px rgba(201, 24, 74, 0.7), 0 0 30px #ff4d6d88; }
+            to { box-shadow: 0 10px 30px rgba(255, 77, 109, 0.9), 0 0 50px #ff6b8b; }
+        }
+
+        #yesBtn:active {
+            transform: translateX(-50%) scale(0.94);
+            background: #b61640;
+        }
+
+        /* ── No button (elusive) ── */
+        #noBtn {
+            background: rgba(30, 30, 40, 0.8);
+            backdrop-filter: blur(5px);
+            color: #ddd;
+            border: 1.5px solid #ff4d6d;
+            padding: 14px 35px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
+            transition: left 0.15s ease-out, top 0.15s ease-out, background 0.2s;
+            position: absolute;
+            white-space: nowrap;
+            z-index: 5;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        #noBtn:active {
+            background: #2a2a35;
+        }
+
+        /* ── Success overlay ── */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .success-card {
+            background: rgba(30, 0, 20, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 30px 25px;
+            text-align: center;
+            max-width: 320px;
+            width: 90%;
+            border: 2px solid #ff4d6d;
+            box-shadow: 0 0 50px #ff4d6d88;
+            animation: popIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .success-emoji {
+            font-size: 75px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .success-text {
+            color: #ffdbe9;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 15px hotpink;
+        }
+
+        .email-link {
+            display: inline-block;
+            background: #ff4d6d;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 10px;
+            box-shadow: 0 5px 20px #ff4d6d80;
+            transition: 0.2s;
+        }
+
+        .email-link:active {
+            transform: scale(0.94);
+            background: #c9184a;
+        }
+
+        .close-hint {
+            color: #ffb3c6;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 450px) {
+            .container {
+                padding: 25px 15px 45px;
+                border-radius: 35px;
+            }
+            #yesBtn {
+                padding: 14px 30px;
+                font-size: 1.4rem;
+            }
+            #noBtn {
+                padding: 12px 25px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Stars -->
+    <div class="stars" id="starsContainer"></div>
+
+    <!-- Floating hearts/roses -->
+    <div class="floaters" id="floatersContainer"></div>
+
+    <!-- Main card -->
+    <div class="container">
+        <div class="rose-emoji">🌹</div>
+        <h2>Will you go on<br>a date with me<span class="heart-accent">❤️</span>?</h2>
+
+        <div class="button-zone" id="buttonZone">
+            <button id="yesBtn">Yes! 💖</button>
+            <button id="noBtn">No 😒</button>
+        </div>
+        <p style="color:#ffccd5; font-size:0.9rem; margin-top:15px; opacity:0.8;">(The “No” is a little shy…)</p>
+    </div>
+
+    <!-- Success overlay -->
+    <div class="overlay" id="overlay">
+        <div class="success-card">
+            <span class="success-emoji">🎉💃🕺</span>
+            <div class="success-text">You said YES!<br>I'm the happiest! 💗</div>
+            <a class="email-link" id="mailLink" href="#">📧 Send me a note</a>
+            <div class="close-hint">(tap outside to close)</div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ────────── Generate stars ──────────
+            const starsContainer = document.getElementById('starsContainer');
+            for (let i = 0; i < 80; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 3 + 1.5;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
+                star.style.setProperty('--del', Math.random() * 4 + 's');
+                starsContainer.appendChild(star);
+            }
+
+            // ────────── Floating hearts & petals ──────────
+            const floatersContainer = document.getElementById('floatersContainer');
+            const floaterEmojis = ['❤️', '🩷', '💕', '💖', '💗', '🌷', '🥀', '✨', '💘', '💝', '🌸', '🌺'];
+            for (let i = 0; i < 25; i++) {
+                const floater = document.createElement('div');
+                floater.className = 'floater';
+                floater.textContent = floaterEmojis[Math.floor(Math.random() * floaterEmojis.length)];
+                floater.style.left = Math.random() * 100 + '%';
+                floater.style.setProperty('--d', (Math.random() * 12 + 10) + 's');
+                floater.style.setProperty('--del', Math.random() * 10 + 's');
+                floater.style.setProperty('--s', (Math.random() * 24 + 16) + 'px');
+                floater.style.setProperty('--dx', (Math.random() * 60 - 30) + 'px');
+                floater.style.setProperty('--rot', (Math.random() * 360) + 'deg');
+                floatersContainer.appendChild(floater);
+            }
+
+            // ────────── Yes / No logic ──────────
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const buttonZone = document.getElementById('buttonZone');
+            const overlay = document.getElementById('overlay');
+            const mailLink = document.getElementById('mailLink');
+
+            // Email setup (customize with your own email address)
+            const yourEmail = 'yourname@email.com'; // <-- change this to your real email
+            const emailSubject = 'YES! 💖 Date confirmed';
+            const emailBody = 'I would love to go on a date with you! 🌹\n\nLet’s plan something wonderful.';
+            mailLink.href = `mailto:${yourEmail}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+
+            // Movement function for No button
+            function moveNoButton(triggerEvent) {
+                const zoneRect = buttonZone.getBoundingClientRect();
+                const btnRect = noBtn.getBoundingClientRect();
+
+                // Calculate safe boundaries inside buttonZone
+                const maxLeft = zoneRect.width - btnRect.width;
+                const maxTop = zoneRect.height - btnRect.height;
+
+                // Random position within the zone (with some padding)
+                let randomLeft = Math.random() * maxLeft;
+                let randomTop = Math.random() * maxTop;
+
+                // Avoid overlapping with Yes button (yes is centered horizontally at top part)
+                // Yes button approximate position: left ~ zoneWidth/2 - yesWidth/2, top ~20px
+                const yesRect = yesBtn.getBoundingClientRect();
+                const yesRelativeLeft = yesRect.left - zoneRect.left;
+                const yesRelativeTop = yesRect.top - zoneRect.top;
+                const yesRight = yesRelativeLeft + yesRect.width;
+                const yesBottom = yesRelativeTop + yesRect.height;
+
+                // If new random position overlaps Yes button area, shift it
+                const padding = 25;
+                const noRight = randomLeft + btnRect.width;
+                const noBottom = randomTop + btnRect.height;
+
+                if (
+                    randomLeft < yesRight + padding &&
+                    noRight > yesRelativeLeft - padding &&
+                    randomTop < yesBottom + padding &&
+                    noBottom > yesRelativeTop - padding
+                ) {
+                    // Move No to a safer corner (lower half)
+                    randomLeft = Math.random() * (maxLeft * 0.8) + (maxLeft * 0.1);
+                    randomTop = Math.random() * (maxTop * 0.5) + (maxTop * 0.5);
+                }
+
+                // Apply new position
+                noBtn.style.left = randomLeft + 'px';
+                noBtn.style.top = randomTop + 'px';
+
+                // Fun: change button text randomly to tease
+                const teasingTexts = [
+                    'No 😒', 'Try again 😜', 'I think you misclicked 😅',
+                    'Are you sure? 😇', 'Nope 🙈', 'You can\'t catch me 😂',
+                    'Too slow! 🏃', 'Just say yes 😉', 'Noooope ✨'
+                ];
+                const currentText = noBtn.textContent.trim();
+                let newText;
+                do {
+                    newText = teasingTexts[Math.floor(Math.random() * teasingTexts.length)];
+                } while (newText === currentText && teasingTexts.length > 1);
+                noBtn.textContent = newText;
+            }
+
+            // Desktop hover (mouseover)
+            noBtn.addEventListener('mouseover', function(e) {
+                moveNoButton(e);
+            });
+
+            // Mobile touch / click: move on tap (so user can't easily press it)
+            noBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                moveNoButton(e);
+                // Optional: vibrate for a playful haptic feedback on supported devices
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(25);
+                }
+            });
+
+            // Also prevent accidental "touchstart" from triggering yes? No, just move.
+            noBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault(); // prevent any default touch behavior
+                moveNoButton(e);
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(20);
+                }
+            }, { passive: false });
+
+            // ────────── Yes button action ──────────
+            yesBtn.addEventListener('click', function(e) {
+                // Show success overlay
+                overlay.classList.add('active');
+                // Haptic feedback
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate([50, 30, 50, 30, 80]);
+                }
+            });
+
+            // Close overlay when tapping outside the card
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                }
+            });
+
+            // Initialize No button position (bottom center area)
+            function setInitialNoPosition() {
+                const zoneRect = buttonZone.getBoundingClientRect();
+                const btnWidth = noBtn.offsetWidth;
+                const btnHeight = noBtn.offsetHeight;
+                // Place it initially below Yes button, centered
+                const left = (zoneRect.width / 2) - (btnWidth / 2);
+                const top = zoneRect.height * 0.65 - btnHeight / 2;
+                noBtn.style.left = Math.max(0, Math.min(left, zoneRect.width - btnWidth)) + 'px';
+                noBtn.style.top = Math.max(0, Math.min(top, zoneRect.height - btnHeight)) + 'px';
+            }
+
+            window.addEventListener('load', setInitialNoPosition);
+            window.addEventListener('resize', () => {
+                // Recalculate bounds after resize, but keep No inside
+                const zoneRect = buttonZone.getBoundingClientRect();
+                const btnRect = noBtn.getBoundingClientRect();
+                let currentLeft = parseFloat(noBtn.style.left) || 0;
+                let currentTop = parseFloat(noBtn.style.top) || 0;
+                const maxLeft = zoneRect.width - btnRect.width;
+                const maxTop = zoneRect.height - btnRect.height;
+                if (currentLeft > maxLeft) noBtn.style.left = maxLeft + 'px';
+                if (currentLeft < 0) noBtn.style.left = '0px';
+                if (currentTop > maxTop) noBtn.style.top = maxTop + 'px';
+                if (currentTop < 0) noBtn.style.top = '0px';
+            });
+
+            // Prevent accidental form submission (no form needed)
+            document.querySelectorAll('button').forEach(b => b.addEventListener('click', (e) => {
+                // just safety
+            }));
+
+        })();
+    </script>
+</body>
+</html>
